@@ -21,14 +21,19 @@ ball_speed = [random.choice([-3, 3]), random.choice([-3, 3])]
 score = 0
 font = pygame.font.SysFont("consolas", 23)
 
-def update():
+def update_score():
     global score
     score += 1
+
+def deduct_score():
+    global score
+    if score > 0:
+        score -= 1
 
 def draw():
     global score
     window.blit(ball_image, ball_rect)
-    score_text = font.render("Score: {}".format(score), True, (255, 255, 255))
+    score_text = font.render("Score: {}".format(score), True, (0, 0, 0))
     window.blit(score_text, (10, 10))
     window.blit(pad_image, pad_rect)
 
@@ -50,10 +55,13 @@ def game_loop():
             ball_speed[0] = -ball_speed[0]
         if ball_rect.top < 0:
             ball_speed[1] = -ball_speed[1]
-        if ball_rect.bottom > WINDOW_HEIGHT and pad_rect.colliderect(ball_rect):
+        if ball_rect.bottom > WINDOW_HEIGHT:
+            deduct_score()
             ball_speed[1] = -ball_speed[1]
-
         if ball_rect.colliderect(pad_rect):
+            update_score()
+            ball_speed[1] = -ball_speed[1]
+        if ball_rect.colliderect(pad_rect) and ball_rect.bottom > pad_rect.bottom:
             ball_speed[1] = -ball_speed[1]
 
         window.fill(lBlue)
