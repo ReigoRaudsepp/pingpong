@@ -27,7 +27,7 @@ def update_score():
 
 def deduct_score():
     global score
-    if score > 0:
+    if score >= 0:
         score -= 1
 
 def draw():
